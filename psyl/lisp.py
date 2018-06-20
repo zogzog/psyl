@@ -12,6 +12,11 @@ class Env(dict):
             return self
         raise LookupError(var)
 
+    def add_globals(self, symbols):
+        "Add some Scheme standard procedures."
+        self.update(symbols)
+        return self
+
 
 class Symbol(str):
 
@@ -98,18 +103,12 @@ def to_string(x):
     return str(x)
 
 
-def add_globals(self):
-    "Add some Scheme standard procedures."
-    self.update({
-        '+': op.add,
-        '-': op.sub,
-        '*': op.mul,
-        '/': op.truediv
-    })
-    return self
-
-
-global_env = add_globals(Env())
+global_env = Env().add_globals({
+    '+': op.add,
+    '-': op.sub,
+    '*': op.mul,
+    '/': op.truediv
+})
 
 
 def leval(x, env=global_env):
