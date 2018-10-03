@@ -2,7 +2,7 @@ from datetime import date
 
 from dateutil.relativedelta import relativedelta
 
-from psyl.lisp import evaluate, global_env
+from psyl.lisp import evaluate, global_env, parse
 
 
 def test_things():
@@ -19,4 +19,5 @@ def test_things():
     assert evaluate('(+ 3 5)') == 8
     print( evaluate('(today)') )
 
+    assert parse('(+ 3 (* 4 5))') == ['+', 3, ['*', 4, 5]]
 

@@ -37,7 +37,7 @@ def expand(x):
     if not isinstance(x, list):
         return x
     else:
-        return map(expand, x)
+        return [expand(item) for item in x]
 
 
 class Reader(object):
