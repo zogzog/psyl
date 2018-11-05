@@ -2,7 +2,6 @@
 # inpired from See http://norvig.com/lispy2.html
 import re
 import io
-import operator as op
 
 
 class Env(dict):
@@ -103,15 +102,9 @@ def to_string(x):
     return str(x)
 
 
-global_env = Env().add_globals({
-    '+': op.add,
-    '-': op.sub,
-    '*': op.mul,
-    '/': op.truediv
-})
+GLOBALENV = Env()
 
-
-def leval(x, env=global_env):
+def leval(x, env=GLOBALENV):
     if isinstance(x, map):
         x = list(x)
     if isinstance(x, Symbol):
@@ -123,5 +116,5 @@ def leval(x, env=global_env):
     return proc(*exps)
 
 
-def evaluate(expr, env=global_env):
+def evaluate(expr, env=GLOBALENV):
     return leval(parse(expr), env=env)

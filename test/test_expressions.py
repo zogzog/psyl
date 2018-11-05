@@ -1,12 +1,17 @@
 from datetime import date
+import operator as op
 
 from dateutil.relativedelta import relativedelta
 
-from psyl.lisp import evaluate, global_env, parse
+from psyl.lisp import evaluate, GLOBALENV, parse
 
 
 def test_things():
-    global_env.update({
+    GLOBALENV.update({
+        '+': op.add,
+        '-': op.sub,
+        '*': op.mul,
+        '/': op.truediv,
         'today': date.today,
         'monthstart': lambda dt: dt.replace(day=1),
         'yearstart': lambda dt: dt.replace(day=1, month=1),
