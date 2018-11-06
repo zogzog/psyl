@@ -17,7 +17,11 @@ class Env(dict):
         return self
 
 
-class Symbol(str):
+class Keyword(str):
+    pass
+
+
+class Symbol(Keyword):
 
     @staticmethod
     def get(s, symbol_table={}):
@@ -30,6 +34,8 @@ class Symbol(str):
 def atom(token):
     if token[0] == '"':
         return token[1:-1]
+    elif token.startswith('#:'):
+        return Keyword(token[2:])
     try:
         return int(token)
     except ValueError:
@@ -103,7 +109,21 @@ def leval(x, env=GLOBALENV):
         return x
     exps = [leval(exp, env) for exp in x]
     proc = exps.pop(0)
-    return proc(*exps)
+    kw = {}
+    posargs = []
+    lastarg = None
+    for arg in exps:
+        if isinstance(lastarg, Keyword):
+            assert not isinstance(arg, Keyword)
+            kw[lastarg] = arg
+            lastarg = arg
+            continue
+        if isinstance(arg, Keyword):
+            lastarg = arg
+            continue
+        else:
+            posargs.append(arg)
+    return proc(*posargs, **kw)
 
 
 def evaluate(expr, env=GLOBALENV):
