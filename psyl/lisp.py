@@ -27,6 +27,18 @@ class Symbol(str):
         return symbol_table[s]
 
 
+def atom(token):
+    if token[0] == '"':
+        return token[1:-1]
+    try:
+        return int(token)
+    except ValueError:
+        try:
+            return float(token)
+        except ValueError:
+            return Symbol.get(token)
+
+
 def parse(source):
     reader = Reader(io.StringIO(source))
     return expand(reader.read())
@@ -78,18 +90,6 @@ class Reader(object):
         # body of read:
         token1 = self.next_token()
         return self.eof if token1 is self.eof else read_ahead(token1)
-
-
-def atom(token):
-    if token[0] == '"':
-        return token[1:-1]
-    try:
-        return int(token)
-    except ValueError:
-        try:
-            return float(token)
-        except ValueError:
-            return Symbol.get(token)
 
 
 GLOBALENV = Env()
