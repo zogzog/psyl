@@ -92,16 +92,6 @@ def atom(token):
             return Symbol.get(token)
 
 
-def to_string(x):
-    if isinstance(x, Symbol):
-        return x
-    elif isinstance(x, str):
-        return '"%s"' % x.encode('string_escape').replace('"', r'\"')
-    elif isinstance(x, list):
-        return '(' + ' '.join(map(to_string, x)) + ')'
-    return str(x)
-
-
 GLOBALENV = Env()
 
 def leval(x, env=GLOBALENV):
