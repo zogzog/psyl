@@ -17,6 +17,7 @@ def test_things():
     print( evaluate('(today)') )
 
     assert parse('(+ 3 (* 4 5))') == ['+', 3, ['*', 4, 5]]
+    assert parse('(and #t #f)') == ['and', True, False]
 
 
 def test_keywords():

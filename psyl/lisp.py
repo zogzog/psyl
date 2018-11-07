@@ -32,9 +32,11 @@ class Symbol(Keyword):
 
 
 def atom(token):
+    if token == '#t': return True
+    if token == '#f': return False
     if token[0] == '"':
         return token[1:-1]
-    elif token.startswith('#:'):
+    if token.startswith('#:'):
         return Keyword(token[2:])
     try:
         return int(token)
