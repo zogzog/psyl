@@ -59,6 +59,31 @@ def expand(x):
         return [expand(item) for item in x]
 
 
+def serialize(tree):
+    """ transform a plain python tree made of nested lists
+    and atoms into a parseable expression
+    """
+    expr = []
+    for node in tree:
+        if isinstance(node, list):
+            expr.append(serialize(node))
+        elif isinstance(node, Symbol):
+            expr.append(node)
+        elif isinstance(node, Keyword):
+            expr.append(f'#:{node}')
+        elif isinstance(node, str):
+            expr.append(f'"{node}"')
+        elif isinstance(node, bool):
+            if node:
+                expr.append('#t')
+            else:
+                expr.append('#f')
+        elif isinstance(node, (int, float)):
+            expr.append(str(node))
+
+    return f'({" ".join(expr)})'
+
+
 class Reader(object):
     "Reads line of chars."
     tokenizer = r"""\s*(,@|[('`,)]|"(?:[\\].|[^\\"])*"|;.*|[^\s('"`,;)]*)(.*)"""
