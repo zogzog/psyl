@@ -86,7 +86,9 @@ def serialize(tree):
 
 class Reader(object):
     "Reads line of chars."
-    tokenizer = r"""\s*(,@|[('`,)]|"(?:[\\].|[^\\"])*"|;.*|[^\s('"`,;)]*)(.*)"""
+    tokenizer = re.compile(
+        r"""\s*(,@|[('`,)]|"(?:[\\].|[^\\"])*"|;.*|[^\s('"`,;)]*)(.*)"""
+    )
     eof = Symbol('#<eof-object>')  # Note: uninterned; can't be read
 
     def __init__(self, stream):
@@ -99,7 +101,7 @@ class Reader(object):
                 self.line = self.stream.readline()
             if self.line == '':
                 return self.eof
-            token, self.line = re.match(self.tokenizer, self.line).groups()
+            token, self.line = self.tokenizer.match(self.line).groups()
             if token != '' and not token.startswith(';'):
                 return token
 
