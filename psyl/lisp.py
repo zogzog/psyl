@@ -11,11 +11,6 @@ class Env(dict):
             return self
         raise LookupError(var)
 
-    def add_globals(self, symbols):
-        "Add some Scheme standard procedures."
-        self.update(symbols)
-        return self
-
 
 class Keyword(str):
     pass
