@@ -33,13 +33,14 @@ def atom(token):
         return token[1:-1]
     if token.startswith('#:'):
         return Keyword(token[2:])
-    try:
-        return int(token)
-    except ValueError:
+
+    for trytype in (int, float):
         try:
-            return float(token)
+            return trytype(token)
         except ValueError:
-            return Symbol.get(token)
+            continue
+
+    return Symbol.get(token)
 
 
 def parse(source):
