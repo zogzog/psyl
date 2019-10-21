@@ -45,7 +45,8 @@ def test_blocking():
     env = Env({
         '+': op.add,
     })
-    assert evaluate('(+ "3" 3")', env) == "33"
+    with pytest.raises(SyntaxError):
+        evaluate('(+ "3" 3")', env)
 
 
 def test_keywords():

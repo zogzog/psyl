@@ -92,6 +92,7 @@ class Reader(object):
         self.line = ''
 
     def next_token(self):
+        prevtoken = None
         while True:
             if self.line == '':
                 self.line = self.stream.readline()
@@ -100,6 +101,9 @@ class Reader(object):
             token, self.line = self.tokenizer.match(self.line).groups()
             if token != '' and not token.startswith(';'):
                 return token
+            if prevtoken == token:
+                raise SyntaxError(f'{self.line} (did you forget an opening quote ?)')
+            prevtoken = token
 
     def read(self):
         def read_ahead(token):
