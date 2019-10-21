@@ -41,6 +41,13 @@ def test_broken():
     assert evaluate('(+ 2 2))', env) == 4
 
 
+def test_blocking():
+    env = Env({
+        '+': op.add,
+    })
+    assert evaluate('(+ "3" 3")', env) == "33"
+
+
 def test_keywords():
     def fun(a, b=42, c=None):
         out = a + b
