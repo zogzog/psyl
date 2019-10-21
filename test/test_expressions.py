@@ -2,6 +2,7 @@ from datetime import date
 import operator as op
 
 from dateutil.relativedelta import relativedelta
+import pytest
 
 from psyl.lisp import (
     Env,
@@ -23,6 +24,17 @@ def test_things():
 
     assert parse('(+ 3 (* 4 5))') == ['+', 3, ['*', 4, 5]]
     assert parse('(and #t #f)') == ['and', True, False]
+
+
+def test_broken():
+    env = Env({
+        '+': op.add,
+    })
+
+    with pytest.raises(SyntaxError):
+        assert evaluate('(+', env)
+    with pytest.raises(SyntaxError):
+        assert evaluate('(+ 3 4', env)
 
 
 def test_keywords():
