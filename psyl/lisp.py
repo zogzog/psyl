@@ -8,7 +8,7 @@ class Env(dict):
 
     def find(self, var):
         if var in self:
-            return self
+            return self[var]
         raise LookupError(var)
 
 
@@ -146,7 +146,7 @@ def leval(x, env=GLOBALENV):
     if isinstance(x, map):
         x = list(x)
     if isinstance(x, Symbol):
-        return env.find(x)[x]
+        return env.find(x)
     elif not isinstance(x, list):
         return x
     exps = [leval(exp, env) for exp in x]
