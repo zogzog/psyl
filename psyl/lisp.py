@@ -140,18 +140,18 @@ def buildargs(expr_args):
     return args, kw
 
 
-def leval(x, env):
-    if isinstance(x, map):
-        x = list(x)
-    if isinstance(x, Symbol):
-        return env.find(x)
-    elif not isinstance(x, list):
-        return x
-    exps = [leval(exp, env) for exp in x]
+def expreval(tree, env):
+    if isinstance(tree, map):
+        tree = list(tree)
+    if isinstance(tree, Symbol):
+        return env.find(tree)
+    elif not isinstance(tree, list):
+        return tree
+    exps = [expreval(exp, env) for exp in tree]
     proc = exps[0]
     posargs, kwargs = buildargs(exps[1:])
     return proc(*posargs, **kwargs)
 
 
 def evaluate(expr, env):
-    return leval(parse(expr), env=env)
+    return expreval(parse(expr), env=env)
