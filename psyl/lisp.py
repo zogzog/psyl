@@ -124,19 +124,11 @@ class Reader(object):
 
 GLOBALENV = Env()
 
-def leval(x, env=GLOBALENV):
-    if isinstance(x, map):
-        x = list(x)
-    if isinstance(x, Symbol):
-        return env.find(x)[x]
-    elif not isinstance(x, list):
-        return x
-    exps = [leval(exp, env) for exp in x]
-    proc = exps.pop(0)
+def buildargs(expr_args):
+    args = []
     kw = {}
-    posargs = []
     lastarg = None
-    for arg in exps:
+    for arg in expr_args:
         if isinstance(lastarg, Keyword):
             assert not isinstance(arg, Keyword)
             kw[lastarg] = arg
@@ -146,8 +138,21 @@ def leval(x, env=GLOBALENV):
             lastarg = arg
             continue
         else:
-            posargs.append(arg)
-    return proc(*posargs, **kw)
+            args.append(arg)
+    return args, kw
+
+
+def leval(x, env=GLOBALENV):
+    if isinstance(x, map):
+        x = list(x)
+    if isinstance(x, Symbol):
+        return env.find(x)[x]
+    elif not isinstance(x, list):
+        return x
+    exps = [leval(exp, env) for exp in x]
+    proc = exps[0]
+    posargs, kwargs = buildargs(exps[1:])
+    return proc(*posargs, **kwargs)
 
 
 def evaluate(expr, env=GLOBALENV):
