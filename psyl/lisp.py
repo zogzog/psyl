@@ -122,8 +122,6 @@ class Reader(object):
         return self.eof if token1 is self.eof else read_ahead(token1)
 
 
-GLOBALENV = Env()
-
 def buildargs(expr_args):
     args = []
     kw = {}
@@ -142,7 +140,7 @@ def buildargs(expr_args):
     return args, kw
 
 
-def leval(x, env=GLOBALENV):
+def leval(x, env):
     if isinstance(x, map):
         x = list(x)
     if isinstance(x, Symbol):
@@ -155,5 +153,5 @@ def leval(x, env=GLOBALENV):
     return proc(*posargs, **kwargs)
 
 
-def evaluate(expr, env=GLOBALENV):
+def evaluate(expr, env):
     return leval(parse(expr), env=env)
