@@ -36,6 +36,10 @@ def test_broken():
     with pytest.raises(SyntaxError):
         assert evaluate('(+ 3 4', env)
 
+    # not too pretty (we are being generous ;)
+    assert evaluate('4)', env) == 4
+    assert evaluate('(+ 2 2))', env) == 4
+
 
 def test_keywords():
     def fun(a, b=42, c=None):
