@@ -29,6 +29,7 @@ class Symbol(Keyword):
 def atom(token):
     if token == '#t': return True
     if token == '#f': return False
+    if token == 'nil': return None
     if token[0] == '"':
         return token[1:-1]
     if token.startswith('#:'):
@@ -74,6 +75,8 @@ def serialize(tree):
                 expr.append('#t')
             else:
                 expr.append('#f')
+        elif node is None:
+            expr.append('nil')
         elif isinstance(node, (int, float)):
             expr.append(str(node))
 

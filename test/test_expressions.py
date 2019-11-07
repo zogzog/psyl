@@ -69,13 +69,13 @@ def test_keywords():
 
 
 def test_parse_serialize():
-    expr = parse('(fun 1 "foo" #f #:c 5 (zogzog 42 #t))')
+    expr = parse('(fun 1 "foo" nil #f #:c 5 (zogzog 42 #t))')
     assert [
         node.__class__.__name__
         for node in expr
     ] == [
-        'Symbol', 'int', 'str', 'bool', 'Keyword', 'int', 'list'
+        'Symbol', 'int', 'str', 'NoneType', 'bool', 'Keyword', 'int', 'list'
     ]
 
     assert serialize(parse('(fun 1 #t #f #:c "babar")')) == '(fun 1 #t #f #:c "babar")'
-    assert serialize(parse('(fun 1 #:c (+ 5.0 7))')) == '(fun 1 #:c (+ 5.0 7))'
+    assert serialize(parse('(fun 1 nil #:c (+ 5.0 7))')) == '(fun 1 nil #:c (+ 5.0 7))'
