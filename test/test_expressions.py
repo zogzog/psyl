@@ -32,6 +32,24 @@ def test_things():
     assert repr(Keyword('k')) == '#:k'
 
 
+def test_parallel_eval():
+    env = Env({
+        '+': op.add,
+        'cat': op.add,
+        'list': lambda *x: list(x)
+    })
+    assert pevaluate('(cat (list "a" "b" "c") (list 1 2 3))', env) == [
+        "a", "b", "c", 1, 2, 3
+    ]
+    assert pevaluate('(+ 3 5)', env) == 8
+    assert pevaluate(
+        '(cat (list "a" "b" "c") '
+        '     (cat (list 1 2 3) (list "d" "e" "f")))',
+        env) == [
+        "a", "b", "c", 1, 2, 3, "d", "e", "f"
+    ]
+
+
 def test_broken():
     env = Env({
         '+': op.add,
