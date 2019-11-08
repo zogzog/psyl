@@ -13,7 +13,9 @@ class Env(dict):
 
 
 class Keyword(str):
-    pass
+
+    def __repr__(self):
+        return f"#:{self}"
 
 
 class Symbol(Keyword):
@@ -24,6 +26,9 @@ class Symbol(Keyword):
         if s not in symbol_table:
             symbol_table[s] = Symbol(s)
         return symbol_table[s]
+
+    def __repr__(self):
+        return f"'{self}"
 
 
 def atom(token):

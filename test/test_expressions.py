@@ -7,8 +7,11 @@ import pytest
 from psyl.lisp import (
     Env,
     evaluate,
+    Keyword,
     parse,
-    serialize
+    pevaluate,
+    serialize,
+    Symbol
 )
 
 
@@ -24,6 +27,9 @@ def test_things():
 
     assert parse('(+ 3 (* 4 5))') == ['+', 3, ['*', 4, 5]]
     assert parse('(and #t #f)') == ['and', True, False]
+
+    assert repr(Symbol('s')) == "'s"
+    assert repr(Keyword('k')) == '#:k'
 
 
 def test_broken():
