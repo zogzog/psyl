@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(name='psyl',
-      version='0.4.0',
+      version='0.5.0',
       author='Pythonian',
       author_email='aurelien.campeas@pythonian.fr',
       description='a stripped down scheme-like parser',
