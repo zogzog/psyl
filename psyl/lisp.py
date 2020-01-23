@@ -178,13 +178,18 @@ class future:
 
     def __init__(self, func, args=(), kw={}):
         def dofunc():
-            self._value = func(*args, **kw)
+            try:
+                self._value = func(*args, **kw)
+            except Exception as e:
+                self._value = e
         self._t = Thread(target=dofunc)
         self._t.start()
 
     @property
     def value(self):
         self._t.join()
+        if isinstance(self._value, Exception):
+            raise self._value
         return self._value
 
 

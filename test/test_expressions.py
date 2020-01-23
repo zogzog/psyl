@@ -33,10 +33,13 @@ def test_things():
 
 
 def test_parallel_eval():
+    def nope():
+        raise ValueError('nope')
     env = Env({
         '+': op.add,
         'cat': op.add,
-        'list': lambda *x: list(x)
+        'list': lambda *x: list(x),
+        'raise': nope
     })
     assert pevaluate('(cat (list "a" "b" "c") (list 1 2 3))', env) == [
         "a", "b", "c", 1, 2, 3
@@ -48,6 +51,9 @@ def test_parallel_eval():
         env) == [
         "a", "b", "c", 1, 2, 3, "d", "e", "f"
     ]
+    with pytest.raises(ValueError) as err:
+        pevaluate('(list (raise) (raise) (raise))', env)
+    assert err.value.args[0] == 'nope'
 
 
 def test_broken():
